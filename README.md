@@ -1,4 +1,4 @@
-# starwars API project
+# Star Wars API project
 
 ## Project setup
 
@@ -23,7 +23,3 @@ npm run build
 ```
 npm run lint
 ```
-
-### Customize configuration
-
-See [Configuration Reference](https://cli.vuejs.org/config/).

@@ -1,5 +1,5 @@
 <template>
-  <div class="hello">
+  <div>
     <h1>{{ msg }}</h1>
     <p>
       This website is using The Star Wars API
@@ -9,11 +9,18 @@
         rel="noopener"
       >Swapi API</a>.
     </p>
-    <button v-on:click="getStarWarsData">Get planet names</button>
+    <h2>Star Wars planets:</h2>
+    <input
+      type="text"
+      v-model.trim="search"
+      placeholder="Search planets..."
+      @keyup="getAllStarWarsPlanets"
+    />
+    <br />
     <ul>
-      <li v-for="item in starWarsData.results" :key="item.diameter">{{ item.name }}</li>
+      <li v-for="item in starWarsData" :key="item.orbital_period">{{ item.name }}</li>
     </ul>
-    <div>{{ starWarsData }}</div>
+    <!--     <div>{{ starWarsData }}</div> -->
   </div>
 </template>
 
@@ -23,35 +30,50 @@ export default {
   props: {
     msg: String
   },
-  data: function() {
+  data() {
     return {
-      starWarsData: []
+      starWarsData: [],
+      search: ""
     };
   },
   methods: {
-    getStarWarsData() {
+    getAllStarWarsPlanets() {
       fetch("https://swapi.co/api/planets/")
         .then(response => response.json())
-        .then(data => (this.starWarsData = data));
+        .then(res => {
+          if (this.search) {
+            this.starWarsData = res.results.filter(starWarsData =>
+              starWarsData.name
+                .toLowerCase()
+                .includes(this.search.toLowerCase())
+            );
+          } else {
+            this.starWarsData = res.results;
+          }
+        });
     }
+  },
+  created() {
+    this.getAllStarWarsPlanets();
   }
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
+<!-- Added "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 h3 {
   margin: 40px 0 0;
 }
 ul {
+  display: flex;
+  flex-direction: column;
   list-style-type: none;
   padding: 0;
 }
 li {
-  display: inline-block;
-  margin: 0 10px;
+  margin: 10px 10px;
 }
 a {
-  color: #42b983;
+  color: #ce9e03;
 }
 </style>
